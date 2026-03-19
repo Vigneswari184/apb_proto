@@ -21,12 +21,12 @@ module apb_master #(
 
 );
 
-   typedef enum logic [1:0] {IDLE, SETUP, ACCESS} state_t;
+  typedef enum logic [1:0] {IDLE, SETUP, ACCESS} state_t;
 state_t state;
   reg [1:0] present,next;
 
   always @(posedge PCLK or posedge PRESET_n) begin
-    if (PRESET_n)
+    if (!PRESET_n)
       present <= IDLE;
     else
       present <= next;
@@ -49,13 +49,12 @@ state_t state;
         SETUP: begin
           PSELx = 1;
           PENABLE = 0;
-          if(WRITE_IN==1)
-            begin
-              PADDR = WADDR;
-              PWDATA = WDATA;
-              PWRITE = WRITE_IN;
-            end
-        end                      
+            next = ACCESS;
+            PADDR = WADDR;
+            PWDATA = WDATA;
+            PWRITE = WRITE_IN;
+          end
+                                
          ACCESS: begin
            PSELx = 1;
            PENABLE = 1;
@@ -63,6 +62,7 @@ state_t state;
              next = ACCESS;
            else if(PREADY==1 && WRITE_IN)
              begin
+               next = IDLE;
                PADDR = WADDR;
                PWDATA = WDATA;
                PWRITE = WRITE_IN;

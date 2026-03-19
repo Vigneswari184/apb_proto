@@ -1,9 +1,10 @@
 `timescale 1ns/1ps
-
+// Top-level: connects APB master to APB slave for cocotb testing.
+// Exposes the test interface (WADDR, WDATA, WRITE_IN, TRANSFER -> PRDATA, PSELx, PENABLE).
 module apb_top #(
     parameter ADDR_WIDTH = 8,
     parameter DATA_WIDTH = 32,
-    parameter REG_NUM    = 4
+    parameter REG_NUM    = 64
 )(
     input  wire                  PCLK,
     input  wire                  PRESET_n,
@@ -22,6 +23,40 @@ module apb_top #(
     wire                  PREADY;
     wire                  PSLVERR;
 
-   //
-    
+    apb_master #(
+        .ADDR_WIDTH ( ADDR_WIDTH ),
+        .DATA_WIDTH ( DATA_WIDTH )
+    ) u_master (
+        .PCLK     ( PCLK     ),
+        .PRESET_n ( PRESET_n ),
+        .PRDATA   ( PRDATA   ),
+        .PREADY   ( PREADY   ),
+        .PSLVERR  ( PSLVERR  ),
+        .TRANSFER ( TRANSFER ),
+        .WADDR    ( WADDR    ),
+        .WDATA    ( WDATA    ),
+        .WRITE_IN ( WRITE_IN ),
+        .PADDR    ( PADDR    ),
+        .PWDATA   ( PWDATA   ),
+        .PWRITE   ( PWRITE   ),
+        .PSELx    ( PSELx    ),
+        .PENABLE  ( PENABLE  )
+    );
+
+    apb_slave #(
+        .ADDR_WIDTH ( ADDR_WIDTH ),
+        .DATA_WIDTH ( DATA_WIDTH ),
+        .REG_NUM    ( REG_NUM   )
+    ) u_slave (
+        .PCLK     ( PCLK     ),
+        .PRESET_n ( PRESET_n ),
+        .PADDR    ( PADDR    ),
+        .PWDATA   ( PWDATA   ),
+        .PWRITE   ( PWRITE   ),
+        .PSELx    ( PSELx    ),
+        .PENABLE  ( PENABLE  ),
+        .PRDATA   ( PRDATA   ),
+        .PREADY   ( PREADY   ),
+        .PSLVERR  ( PSLVERR  )
+    );
 endmodule
