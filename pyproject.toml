@@ -1,13 +1,10 @@
 [project]
-name = "example-verilog-codebase"
+name = "apb-proto"
 version = "0.1.0"
-description = "APB RTL problem repo for grading; cocotb tests run via uv."
+description = "Add your description here"
+readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "cocotb>=2.0",
-    "pytest>=8.0",
+    "cocotb>=2.0.1",
+    "pytest>=9.0.2",
 ]
-
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"

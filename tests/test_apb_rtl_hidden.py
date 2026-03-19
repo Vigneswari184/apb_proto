@@ -83,10 +83,10 @@ class APBDriver:
 
 async def reset(dut):
 
-    dut.PRESETn.value = 0
+    dut.PRESET_n.value = 0
     await RisingEdge(dut.PCLK)
 
-    dut.PRESETn.value = 1
+    dut.PRESET_n.value = 1
     await RisingEdge(dut.PCLK)
 
 
